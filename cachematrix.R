@@ -3,17 +3,17 @@
 ## makeCacheMatrix: This function creates a special "matrix" object that can cache its inverse.
 
 makeCacheMatrix <- function(x = matrix()) {
-        inv <- NULL
-	  set <- function(y) {
-                x <<- y
-		    inv <<- NULL	  
+        inv <- NULL  ## inv is the inverse matrix of m and is initialiazed as null
+	  set <- function(y) {   ## the set function may be used to change the matrix without re-initializing makeCacheMatrix
+                x <<- y   ## this assigns the value of y to m in the parent environment  
+		    inv <<- NULL	    ## this assigns null to m in the parent environment
 	  }	
-	  get <- function() x
-        setinverse <- function(inverse) inv <<- inverse
-	  getinverse <- function() inv
+	  get <- function() x   ## this gets m from the parent environment
+        setinverse <- function(inverse) inv <<- inverse  ## this assigns the value inverse to inv in the parent environment
+	  getinverse <- function() inv  ## this gets the inverse matrix
 	  list(set = set, get = get,
  		 setinverse = setinverse,
-		 getinverse = getinverse)
+		 getinverse = getinverse)  ## this returns a list of named functions
 }
 
 
@@ -22,13 +22,14 @@ makeCacheMatrix <- function(x = matrix()) {
 ## then cacheSolve should retrieve the inverse from the cache.
 
 cacheSolve <- function(x, ...) {
-        inv <- x$getinverse()
+        inv <- x$getinverse()  ## it gets the inverse matrix from makeCacheMatri
 	  if(!is.null(inv)) {
 		    message("getting cached data")
 		    return(inv)
-	  }
-	  mat <- x$get()
-	  inv <-solve(mat, ...)
-	  x$setinverse(inv)
+	  }  ## this checks if inv (the inverse matrix) is null or not. If not, it return the cached inv
+	  mat <- x$get()  ## if inv is null, then it gets mat from makeCacheMatrix
+	  inv <-solve(mat, ...)  ## it calculates the inverse of matrix and assigns it to inv
+	  x$setinverse(inv) ## in the setinverse function within makeCacheMatrix the inverse matrix 
+	  		    ## is assigned to i in the parent environment
 	  inv
 }
